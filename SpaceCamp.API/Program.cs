@@ -1,10 +1,13 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SpaceCamp.Application.Features.Activities;
 using SpaceCamp.Persistence.Data;
 using System;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,8 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
     });
 });
+builder.Services.AddMediatR(Assembly.Load("SpaceCamp.Application"));
+builder.Services.AddAutoMapper(Assembly.Load("SpaceCamp.Application"));
 
 var app = builder.Build();
 

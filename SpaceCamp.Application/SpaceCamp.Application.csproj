@@ -6,4 +6,14 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpaceCamp.Domain\SpaceCamp.Domain.csproj" />
+    <ProjectReference Include="..\SpaceCamp.Persistence\SpaceCamp.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>
