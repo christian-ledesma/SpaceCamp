@@ -23,8 +23,8 @@ export const ActivityDetails = ({ activity, cancelSelectActivity, openForm }: Pr
             </Card.Content>
             <Card.Content extra>
                 <Button.Group widths={2}>
-                    <Button basic color="blue" content="edit" onClick={() => openForm(activity.id)} />
-                    <Button basic color="grey" content="cancel" onClick={cancelSelectActivity} />
+                    <Button basic color="blue" content="Edit" onClick={() => openForm(activity.id)} />
+                    <Button basic color="grey" content="Cancel" onClick={cancelSelectActivity} />
                 </Button.Group>
             </Card.Content>
         </Card>
