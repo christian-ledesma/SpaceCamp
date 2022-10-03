@@ -31,7 +31,7 @@ export const ActivityDetails = observer(() => {
             </Card.Content>
             <Card.Content extra>
                 <Button.Group widths={2}>
-                    <Button as={Link} to={`activities/edit/${activity.id}`} basic color="blue" content="Edit" />
+                    <Button as={Link} to={`/activities/edit/${activity.id}`} basic color="blue" content="Edit" />
                     <Button as={Link} to="/activities" basic color="grey" content="Cancel" />
                 </Button.Group>
             </Card.Content>

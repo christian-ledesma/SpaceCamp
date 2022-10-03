@@ -1,6 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { Activity } from "../models/Activity";
-import { v4 as uuid } from 'uuid';
 import agent from "../services/agent";
 
 export default class ActivityStore {
@@ -8,7 +7,7 @@ export default class ActivityStore {
     selectedActivity: Activity | undefined = undefined;
     editMode: boolean = false;
     loading: boolean = false;
-    loadingInitial: boolean = false;
+    loadingInitial: boolean = true;
 
     constructor() {
         makeAutoObservable(this)
@@ -39,12 +38,16 @@ export default class ActivityStore {
         if (_activity) {
             this.selectedActivity = _activity;
             this.setLoadingInitial(false);
+            return _activity;
         } else {
             try {
                 _activity = await agent.Activities.details(id);
                 this.setActivity(_activity);
-                this.selectedActivity = _activity;
+                runInAction(() => {
+                    this.selectedActivity = _activity;
+                });
                 this.setLoadingInitial(false);
+                return _activity;
             } catch (error) {
                 console.log(error);
                 this.setLoadingInitial(false);
@@ -67,7 +70,6 @@ export default class ActivityStore {
 
     createActivity = async (activity: Activity) => {
         this.loading = true;
-        activity.id = uuid();
         try {
             await agent.Activities.create(activity);
             runInAction(() => {
