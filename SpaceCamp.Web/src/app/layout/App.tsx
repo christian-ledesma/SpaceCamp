@@ -1,27 +1,26 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Container } from 'semantic-ui-react';
 import { NavBar } from './NavBar';
 import { ActivityDashboard } from '../../features/activities/dashboard/ActivitiesDashboard';
-import { Loading } from './Loading';
-import { useStore } from '../stores/store';
 import { observer } from 'mobx-react-lite';
+import { Route, Routes } from 'react-router-dom';
+import Home from '../../features/home/Home';
+import { ActivityForm } from '../../features/activities/form/ActivityForm';
+import { ActivityDetails } from '../../features/activities/details/ActivityDetails';
 
 function App() {
-  const { activityStore } = useStore();
-
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
-
-  if (activityStore.loadingInitial) return (
-    <Loading />
-  );
 
   return (
     <>
       <NavBar />
       <Container style={{ marginTop: "7em" }}>
-        <ActivityDashboard />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/activities" element={<ActivityDashboard />} />
+          <Route path="/activities/:id" element={<ActivityDetails />} />
+          <Route path="/activities/new" element={<ActivityForm />} />
+          <Route path="activities/edit/:id" element={<ActivityForm />} />
+        </Routes>
       </Container>
     </>
   );
