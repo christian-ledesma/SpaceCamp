@@ -1,10 +1,11 @@
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SpaceCamp.Application.Features.Activities;
+using SpaceCamp.API.Middleware;
 using SpaceCamp.Persistence.Data;
 using System;
 using System.Reflection;
@@ -12,7 +13,12 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation(config =>
+{
+    config.RegisterValidatorsFromAssembly(Assembly.Load("SpaceCamp.Application"));
+});
+
+//builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -51,9 +57,9 @@ using (var scope = app.Services.CreateScope())
 
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
