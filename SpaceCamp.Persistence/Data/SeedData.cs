@@ -1,4 +1,5 @@
-﻿using SpaceCamp.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using SpaceCamp.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,24 @@ namespace SpaceCamp.Persistence.Data
 {
     public class SeedData
     {
-        public static async Task SeedDbData(SpaceCampContext context)
+        public static async Task SeedDbData(SpaceCampContext context, UserManager<User> userManager)
         {
+            if (!userManager.Users.Any())
+            {
+                var users = new List<User>
+                {
+                    new User { DisplayName = "Christian", UserName = "christianleds", Email = "christian@spacecamp.com" },
+                    new User { DisplayName = "Omar", UserName = "omarleds", Email = "omar@spacecamp.com" },
+                    new User { DisplayName = "Jose", UserName = "joseleds", Email = "jose@spacecamp.com" },
+                    new User { DisplayName = "Rosario", UserName = "rosarioag", Email = "rosario@spacecamp.com" }
+                };
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+            }
+
             if (context.Activities.Any()) return;
 
             var activities = new List<Activity>

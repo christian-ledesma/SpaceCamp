@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SpaceCamp.Domain.Entities;
 
 namespace SpaceCamp.Persistence.Data
 {
-    public class SpaceCampContext : DbContext
+    public class SpaceCampContext : IdentityDbContext<User>
     {
         public SpaceCampContext(DbContextOptions options) : base(options)
         {

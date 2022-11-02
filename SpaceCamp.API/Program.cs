@@ -1,11 +1,16 @@
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SpaceCamp.API.Extensions;
 using SpaceCamp.API.Middleware;
+using SpaceCamp.Domain.Entities;
 using SpaceCamp.Persistence.Data;
 using System;
 using System.Reflection;
@@ -13,10 +18,15 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers().AddFluentValidation(config =>
+builder.Services.AddControllers(options =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+}).AddFluentValidation(config =>
 {
     config.RegisterValidatorsFromAssembly(Assembly.Load("SpaceCamp.Application"));
 });
+builder.Services.AddIdentityServices(builder.Configuration);
 
 //builder.Services.AddFluentValidationAutoValidation();
 
@@ -46,8 +56,9 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<SpaceCampContext>();
+        var userManager = services.GetRequiredService<UserManager<User>>();
         await context.Database.MigrateAsync();
-        await SeedData.SeedDbData(context);
+        await SeedData.SeedDbData(context, userManager);
     }
     catch (Exception)
     {
@@ -70,6 +81,7 @@ app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
