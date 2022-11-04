@@ -1,3 +1,4 @@
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -18,17 +19,16 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddValidatorsFromAssembly(Assembly.Load("SpaceCamp.Application"));
+builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddControllers(options =>
 {
     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     options.Filters.Add(new AuthorizeFilter(policy));
-}).AddFluentValidation(config =>
-{
-    config.RegisterValidatorsFromAssembly(Assembly.Load("SpaceCamp.Application"));
 });
+
 builder.Services.AddIdentityServices(builder.Configuration);
 
-//builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
