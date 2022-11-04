@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceCamp.API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseController
     {
 
