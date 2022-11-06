@@ -1,0 +1,44 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using SpaceCamp.Persistence.Data;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
+namespace SpaceCamp.Infrastructure.Security
+{
+    public class IsHostRequirement : IAuthorizationRequirement
+    {
+
+    }
+
+    public class IsHostRequirementHandler : AuthorizationHandler<IsHostRequirement>
+    {
+        private readonly SpaceCampContext _context;
+        private readonly IHttpContextAccessor _contextAccessor;
+
+        public IsHostRequirementHandler(SpaceCampContext context, IHttpContextAccessor contextAccessor)
+        {
+            _context = context;
+            _contextAccessor = contextAccessor;
+        }
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
+        {
+            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null) return Task.CompletedTask;
+
+            var activityId = Guid.Parse(_contextAccessor.HttpContext?.Request.RouteValues.SingleOrDefault(x => x.Key == "id").Value?.ToString());
+
+            var attendee = _context.ActivityAttendees.AsNoTracking().SingleOrDefaultAsync(x => x.UserId == userId && x.ActivityId == activityId).Result;
+
+            if (attendee == null) return Task.CompletedTask;
+
+            if (attendee.IsHost) context.Succeed(requirement);
+
+            return Task.CompletedTask;
+        }
+    }
+}

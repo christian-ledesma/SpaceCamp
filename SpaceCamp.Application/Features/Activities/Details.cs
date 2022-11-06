@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SpaceCamp.Application.Core;
 using SpaceCamp.Domain.Entities;
 using SpaceCamp.Persistence.Data;
@@ -10,21 +13,24 @@ namespace SpaceCamp.Application.Features.Activities
 {
     public class Details
     {
-        public class Query : IRequest<Result<Activity>>        {
+        public class Query : IRequest<Result<ActivityDto>>        {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<Activity>>
+        public class Handler : IRequestHandler<Query, Result<ActivityDto>>
         {
             private readonly SpaceCampContext _context;
-            public Handler(SpaceCampContext context)
+            private readonly IMapper _mapper;
+
+            public Handler(SpaceCampContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
-            public async Task<Result<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<ActivityDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
-                return Result<Activity>.Success(activity);
+                var activity = await _context.Activities.ProjectTo<ActivityDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == request.Id);
+                return Result<ActivityDto>.Success(activity);
             }
         }
     }

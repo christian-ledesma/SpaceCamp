@@ -11,7 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpaceCamp.API.Extensions;
 using SpaceCamp.API.Middleware;
+using SpaceCamp.Application.Interfaces;
 using SpaceCamp.Domain.Entities;
+using SpaceCamp.Infrastructure.Security;
 using SpaceCamp.Persistence.Data;
 using System;
 using System.Reflection;
@@ -47,6 +49,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddMediatR(Assembly.Load("SpaceCamp.Application"));
 builder.Services.AddAutoMapper(Assembly.Load("SpaceCamp.Application"));
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
 var app = builder.Build();
 

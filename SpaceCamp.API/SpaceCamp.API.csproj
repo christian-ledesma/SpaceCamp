@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SpaceCamp.Application\SpaceCamp.Application.csproj" />
+    <ProjectReference Include="..\SpaceCamp.Infrastructure\SpaceCamp.Infrastructure.csproj" />
     <ProjectReference Include="..\SpaceCamp.Persistence\SpaceCamp.Persistence.csproj" />
   </ItemGroup>
 

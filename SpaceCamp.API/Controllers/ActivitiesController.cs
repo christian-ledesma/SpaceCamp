@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace SpaceCamp.API.Controllers
 {
-    [AllowAnonymous]
     public class ActivitiesController : BaseController
     {
 
@@ -33,6 +32,7 @@ namespace SpaceCamp.API.Controllers
             return HandleResult(res);
         }
 
+        [Authorize(Policy = "IsActivityHost")]
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] Activity activity)
@@ -47,6 +47,14 @@ namespace SpaceCamp.API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var res = await Mediator.Send(new Delete.Command { Id = id });
+            return HandleResult(res);
+        }
+
+        [HttpPost]
+        [Route("{id}/attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            var res = await Mediator.Send(new UpdateAttendance.Command { Id = id});
             return HandleResult(res);
         }
     }

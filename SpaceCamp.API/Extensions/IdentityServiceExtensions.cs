@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SpaceCamp.API.Services;
 using SpaceCamp.Domain.Entities;
+using SpaceCamp.Infrastructure.Security;
 using SpaceCamp.Persistence.Data;
 using System.Text;
 
@@ -32,6 +34,14 @@ namespace SpaceCamp.API.Extensions
                         ValidateAudience = false
                     };
                 });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsActivityHost", policy =>
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.AddScoped<TokenService>();
             return services;
         }

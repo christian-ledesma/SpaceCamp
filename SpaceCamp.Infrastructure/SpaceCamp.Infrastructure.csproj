@@ -6,4 +6,8 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SpaceCamp.Application\SpaceCamp.Application.csproj" />
+  </ItemGroup>
+
 </Project>
