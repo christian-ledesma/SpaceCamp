@@ -1,4 +1,6 @@
-﻿
+﻿using SpaceCamp.Domain.Entities;
+using System.Collections.Generic;
+
 namespace SpaceCamp.Application.Features.Profiles
 {
     public class Profile
@@ -7,5 +9,6 @@ namespace SpaceCamp.Application.Features.Profiles
         public string DisplayName { get; set; }
         public string Bio { get; set; }
         public string Image { get; set; }
+        public ICollection<Photo> Photos { get; set; }
     }
 }
