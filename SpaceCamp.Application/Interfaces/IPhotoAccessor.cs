@@ -6,7 +6,7 @@ namespace SpaceCamp.Application.Interfaces
 {
     public interface IPhotoAccessor
     {
-        Task<PhotoUploadResult> AddPhotoAsync(IFormFile photoFile);
+        Task<PhotoUploadResult> AddPhotoAsync(IFormFile file);
         Task<string> DeletePhotoAsync(string publicId);
     }
 }
