@@ -12,7 +12,9 @@ using Microsoft.Extensions.Hosting;
 using SpaceCamp.API.Extensions;
 using SpaceCamp.API.Middleware;
 using SpaceCamp.Application.Interfaces;
+using SpaceCamp.Application.Photos;
 using SpaceCamp.Domain.Entities;
+using SpaceCamp.Infrastructure.Photos;
 using SpaceCamp.Infrastructure.Security;
 using SpaceCamp.Persistence.Data;
 using System;
@@ -50,6 +52,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddMediatR(Assembly.Load("SpaceCamp.Application"));
 builder.Services.AddAutoMapper(Assembly.Load("SpaceCamp.Application"));
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+builder.Services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 
 var app = builder.Build();
 
