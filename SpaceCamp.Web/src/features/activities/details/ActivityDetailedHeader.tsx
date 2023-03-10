@@ -44,7 +44,7 @@ export const ActivityDetailedHeader = observer(({ activity }: Props) => {
                                 />
                                 <p>{format(activity.date!, 'dd MMM yyyy')}</p>
                                 <p>
-                                    Hosted by <strong><Link to={`/profiles/${activity.host?.username}`}>{activity.host?.displayName}</Link></strong>
+                                    Hosted by <strong><Link to={`/profiles/${activity.host?.username}`}>{activity.host?.username}</Link></strong>
                                 </p>
                             </Item.Content>
                         </Item>
