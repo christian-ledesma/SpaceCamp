@@ -11,8 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpaceCamp.API.Extensions;
 using SpaceCamp.API.Middleware;
+using SpaceCamp.API.SignalRHubs;
 using SpaceCamp.Application.Interfaces;
-using SpaceCamp.Application.Photos;
 using SpaceCamp.Domain.Entities;
 using SpaceCamp.Infrastructure.Photos;
 using SpaceCamp.Infrastructure.Security;
@@ -46,7 +46,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+        policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins("http://localhost:3000", "https://localhost:3000");
     });
 });
 builder.Services.AddMediatR(Assembly.Load("SpaceCamp.Application"));
@@ -54,6 +58,7 @@ builder.Services.AddAutoMapper(Assembly.Load("SpaceCamp.Application"));
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -85,6 +90,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+app.MapHub<ChatHub>("/chat");
 
 app.UseCors("CorsPolicy");
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SpaceCamp.Application.Features.Activities;
+using SpaceCamp.Application.Features.Comments;
 using SpaceCamp.Domain.Entities;
 using System.Linq;
 using MyProfile = SpaceCamp.Application.Features.Profiles.Profile;
@@ -21,6 +22,11 @@ namespace SpaceCamp.Application.Core
                 .ReverseMap();
             CreateMap<User, MyProfile>()
                 .ForMember(x => x.Image, y => y.MapFrom(z => z.Photos.FirstOrDefault(a => a.IsMain).Url))
+                .ReverseMap();
+            CreateMap<Comment, CommentDto>()
+                .ForMember(x => x.DisplayName, y => y.MapFrom(x => x.Author.DisplayName))
+                .ForMember(x => x.Username, y => y.MapFrom(x => x.Author.UserName))
+                .ForMember(x => x.Image, y => y.MapFrom(z => z.Author.Photos.FirstOrDefault(a => a.IsMain).Url))
                 .ReverseMap();
         }
     }
