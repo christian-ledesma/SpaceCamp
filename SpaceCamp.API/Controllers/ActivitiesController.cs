@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SpaceCamp.Application.Core;
 using SpaceCamp.Application.Features.Activities;
 using SpaceCamp.Domain.Entities;
 using System;
@@ -11,10 +12,10 @@ namespace SpaceCamp.API.Controllers
     {
 
         [HttpGet]
-        public async Task<IActionResult> GetList()
+        public async Task<IActionResult> GetList([FromQuery]ActivityParams param)
         {
-            var res = await Mediator.Send(new List.Query());
-            return HandleResult(res);
+            var res = await Mediator.Send(new List.Query { Params = param });
+            return HandlePagedResult(res);
         }
 
         [HttpGet]

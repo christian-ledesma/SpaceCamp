@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import {useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
 import { Header, Icon } from 'semantic-ui-react';
 
@@ -24,7 +24,7 @@ export const PhotoWidgetDropzone = ({setFiles}: Props) => {
     setFiles(acceptedFiles.map((file: any) => Object.assign(file, {
         preview: URL.createObjectURL(file)
     })))
-  }, [])
+  }, [setFiles])
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   return (
