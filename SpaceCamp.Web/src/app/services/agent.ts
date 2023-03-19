@@ -1,10 +1,10 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { history } from "../..";
 import { Activity, ActivityFormValues } from "../models/Activity";
 import { PaginatedResult } from "../models/Pagination";
 import { Photo, Profile } from "../models/Profile";
 import { User, UserFormValues } from "../models/User";
+import { router } from "../router/Routes";
 import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
@@ -46,7 +46,7 @@ axios.interceptors.response.use(
           toast.error(data);
         }
         if (config.method === "get" && data.errors.hasOwnProperty("id")) {
-          history.push("not-found");
+          router.navigate("not-found");
         }
         if (data.errors) {
           const modalStateErrors = [];
@@ -62,13 +62,13 @@ axios.interceptors.response.use(
         toast.error("unauthorised");
         break;
       case 404:
-        history.push("not-found");
+        router.navigate("not-found");
         toast.error("not found");
         break;
       case 500:
         toast.error("server error");
         store.commonStore.setServerError(data);
-        history.push("server-error");
+        router.navigate("server-error");
         break;
     }
     return Promise.reject(error);

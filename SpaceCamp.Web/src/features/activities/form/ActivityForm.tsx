@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Header, Segment } from "semantic-ui-react";
 import { Loading } from "../../../app/layout/Loading";
 import { useStore } from "../../../app/stores/store";
@@ -16,7 +16,7 @@ import { CustomDateInput } from "../../../app/common/form/CustomDateInput";
 import { ActivityFormValues } from "../../../app/models/Activity";
 
 export const ActivityForm = observer(() => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { activityStore } = useStore();
     const { createActivity, updateActivity, loadActivity, loadingInitial } = activityStore;
     const { id } = useParams<{ id: string }>();
@@ -43,11 +43,11 @@ export const ActivityForm = observer(() => {
                 id: uuid()
             };
             createActivity(newActivity).then(() => {
-                history.push(`/activities/${newActivity.id}`);
+                navigate(`/activities/${newActivity.id}`);
             });
         } else {
             updateActivity(activity).then(() => {
-                history.push(`/activities/${activity.id}`);
+                navigate(`/activities/${activity.id}`);
             });
         }
     };

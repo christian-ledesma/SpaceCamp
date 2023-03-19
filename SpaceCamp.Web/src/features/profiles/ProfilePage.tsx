@@ -14,7 +14,8 @@ export const ProfilePage = observer(() => {
     const { loadingProfile, loadProfile, profile, setActiveTab } = profileStore;
 
     useEffect(() => {
-        loadProfile(username);
+        if (username)
+            loadProfile(username);
         return () => {
             setActiveTab(0);
         }
