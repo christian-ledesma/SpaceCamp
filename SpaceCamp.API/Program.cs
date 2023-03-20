@@ -90,13 +90,17 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
-app.MapHub<ChatHub>("/chat");
 
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
+app.MapHub<ChatHub>("/chat");
+app.MapFallbackToController("Index", "Fallback");
 
 app.Run();
