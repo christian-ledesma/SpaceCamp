@@ -39,7 +39,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<SpaceCampContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddCors(options =>
